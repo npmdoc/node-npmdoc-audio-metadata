@@ -1,0 +1,947 @@
+<div class="apidocDiv">
+<style>
+/*csslint
+*/
+.apidocDiv {
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+}
+.apidocDiv a[href] {
+    color: #33f;
+    font-weight: bold;
+    text-decoration: none;
+}
+.apidocDiv a[href]:hover {
+    text-decoration: underline;
+}
+.apidocCodeCommentSpan {
+    background: #bbf;
+    color: #000;
+    display: block;
+}
+.apidocCodeKeywordSpan {
+    color: #d00;
+    font-weight: bold;
+}
+.apidocCodePre {
+    background: #eef;
+    border: 1px solid;
+    color: #777;
+    padding: 5px;
+    white-space: pre-wrap;
+}
+.apidocFooterDiv {
+    margin-top: 20px;
+    text-align: center;
+}
+.apidocModuleLi {
+    margin-top: 10px;
+}
+.apidocSectionDiv {
+    border-top: 1px solid;
+    margin-top: 20px;
+}
+.apidocSignatureSpan {
+    color: #777;
+    font-weight: bold;
+}
+</style>
+<h1>api documentation for
+    <a
+
+        href="https://github.com/tmont/audio-metadata"
+
+    >audio-metadata (v0.3.0)</a>
+</h1>
+<h4>Extract metadata from audio files</h4>
+<div class="apidocSectionDiv"><a
+    href="#apidoc.tableOfContents"
+    id="apidoc.tableOfContents"
+><h1>table of contents</h1></a><ol>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.audio-metadata">module audio-metadata</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.audio-metadata.id3v1">
+            function <span class="apidocSignatureSpan">audio-metadata.</span>id3v1
+            <span class="apidocSignatureSpan">(buffer)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.audio-metadata.id3v2">
+            function <span class="apidocSignatureSpan">audio-metadata.</span>id3v2
+            <span class="apidocSignatureSpan">(buffer)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.audio-metadata.ogg">
+            function <span class="apidocSignatureSpan">audio-metadata.</span>ogg
+            <span class="apidocSignatureSpan">(buffer)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">audio-metadata.</span>utils</span>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.audio-metadata.id3v1">module audio-metadata.id3v1</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.audio-metadata.id3v1.id3v1">
+            function <span class="apidocSignatureSpan">audio-metadata.</span>id3v1
+            <span class="apidocSignatureSpan">(buffer)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.audio-metadata.id3v2">module audio-metadata.id3v2</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.audio-metadata.id3v2.id3v2">
+            function <span class="apidocSignatureSpan">audio-metadata.</span>id3v2
+            <span class="apidocSignatureSpan">(buffer)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.audio-metadata.ogg">module audio-metadata.ogg</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.audio-metadata.ogg.ogg">
+            function <span class="apidocSignatureSpan">audio-metadata.</span>ogg
+            <span class="apidocSignatureSpan">(buffer)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+    <li class="apidocModuleLi"><a href="#apidoc.module.audio-metadata.utils">module audio-metadata.utils</a><ol>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.audio-metadata.utils.createView">
+            function <span class="apidocSignatureSpan">audio-metadata.utils.</span>createView
+            <span class="apidocSignatureSpan">(buffer)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.audio-metadata.utils.readAscii">
+            function <span class="apidocSignatureSpan">audio-metadata.utils.</span>readAscii
+            <span class="apidocSignatureSpan">(view, offset, length)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.audio-metadata.utils.readBytes">
+            function <span class="apidocSignatureSpan">audio-metadata.utils.</span>readBytes
+            <span class="apidocSignatureSpan">(view, offset, length, target)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.audio-metadata.utils.readUtf8">
+            function <span class="apidocSignatureSpan">audio-metadata.utils.</span>readUtf8
+            <span class="apidocSignatureSpan">(view, offset, length)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.audio-metadata.utils.trimNull">
+            function <span class="apidocSignatureSpan">audio-metadata.utils.</span>trimNull
+            <span class="apidocSignatureSpan">(s)</span>
+            </a>
+
+        </li>
+
+    </ol></li>
+
+</ol></div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.audio-metadata" id="apidoc.module.audio-metadata">module audio-metadata</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.audio-metadata.id3v1" id="apidoc.element.audio-metadata.id3v1">
+        function <span class="apidocSignatureSpan">audio-metadata.</span>id3v1
+        <span class="apidocSignatureSpan">(buffer)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">id3v1 = function (buffer) {
+	//read last 128 bytes
+	var view = utils.createView(buffer);
+	if (!checkMagicId3v1(view)) {
+		return null;
+	}
+
+	function trim(value) {
+		return value.replace(/[\s\u0000]+$/, &#x27;&#x27;);
+	}
+
+	try {
+		var offset = view.byteLength - 128 + 3,
+			readAscii = utils.readAscii;
+		var title = readAscii(view, offset, 30),
+			artist = readAscii(view, offset + 30, 30),
+			album = readAscii(view, offset + 60, 30),
+			year = readAscii(view, offset + 90, 4);
+
+		offset += 94;
+
+		var comment = readAscii(view, offset, 28),
+			track = null;
+		offset += 28;
+		if (view.getUint8(offset) === 0) {
+			//next byte is the track
+			track = view.getUint8(offset + 1);
+		} else {
+			comment += readAscii(view, offset, 2);
+		}
+
+		offset += 2;
+		var genre = view.getUint8(offset);
+		return {
+			title: trim(title),
+			artist: trim(artist),
+			album: trim(album),
+			year: trim(year),
+			comment: trim(comment),
+			track: track,
+			genre: genre
+		};
+	} catch (e) {
+		return null;
+	}
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+// extract comments from OGG container
+AudioMetaData.ogg(buffer)
+
+// extract ID3v2 tags
+AudioMetaData.id3v2(buffer);
+
+// extract ID3v1 tags
+AudioMetaData.<span class="apidocCodeKeywordSpan">id3v1</span>(buffer);
+```
+
+The result is an object with the metadata. It attempts to normalize common keys:
+
+* &#x27;&#x27;title&#x27;&#x27;: (`TIT1` and `TIT2` in id3v2)
+* &#x27;&#x27;artist&#x27;&#x27; (`TSE1` in id3v2)
+* &#x27;&#x27;composer&#x27;&#x27; (`TCOM` in id3v2)
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.audio-metadata.id3v2" id="apidoc.element.audio-metadata.id3v2">
+        function <span class="apidocSignatureSpan">audio-metadata.</span>id3v2
+        <span class="apidocSignatureSpan">(buffer)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">id3v2 = function (buffer) {
+	var view = utils.createView(buffer);
+	if (!checkMagicId3(view, 0)) {
+		return null;
+	}
+
+	var offset = 3;
+	//var majorVersion = view.getUint8(offset);
+	offset += 2;
+	var flags = view.getUint8(offset);
+	offset++;
+	var size = getUint28(view, offset);
+	offset += 4;
+
+	var extendedHeader = (flags &#x26; 128) &#x3e; 0;
+
+	if (extendedHeader) {
+		offset += getUint28(view, offset);
+	}
+
+	function readFrame(offset) {
+		try {
+			var id = utils.readAscii(view, offset, 4);
+			var size = getUint28(view, offset + 4);
+			offset += 10; //+2 more for flags we don&#x27;t care about
+
+			if (id[0] !== &#x27;T&#x27;) {
+				return {
+					id: id,
+					size: size + 10
+				};
+			}
+
+			var encoding = view.getUint8(offset),
+				data = &#x27;&#x27;;
+
+			if (encoding &#x3c;= 3) {
+				offset++;
+				if (encoding === 3) {
+					//UTF8 - null terminated
+					data = utils.readUtf8(view, offset, size - 1);
+				} else {
+					//ISO-8859-1, UTF-16, UTF-16BE
+					//UTF-16 and UTF-16BE are $FF $00 terminated
+					//ISO is null terminated
+
+					//screw these encodings, read it as ascii
+					data = utils.readAscii(view, offset, size - 1);
+				}
+			} else {
+				//no encoding info, read it as ascii
+				data = utils.readAscii(view, offset, size);
+			}
+
+			//id3v2.4 is supposed to have encoding terminations, but sometimes
+			//they don&#x27;t? meh.
+			data = utils.trimNull(data);
+
+			return {
+				id: id,
+				size: size + 10,
+				content: data
+			};
+		} catch (e) {
+			return null;
+		}
+	}
+
+	var idMap = {
+		TALB: &#x27;album&#x27;,
+		TCOM: &#x27;composer&#x27;,
+		TIT1: &#x27;title&#x27;,
+		TIT2: &#x27;title&#x27;,
+		TPE1: &#x27;artist&#x27;,
+		TRCK: &#x27;track&#x27;,
+		TSSE: &#x27;encoder&#x27;,
+		TDRC: &#x27;year&#x27;,
+		TCON: &#x27;genre&#x27;
+	};
+
+	var endOfTags = offset + size,
+		frames = {};
+	while (offset &#x3c; endOfTags) {
+		var frame = readFrame(offset);
+		if (!frame) {
+			break;
+		}
+
+		offset += frame.size;
+		if (!frame.content) {
+			continue;
+		}
+		var id = idMap[frame.id] || frame.id;
+		if (id === &#x27;TXXX&#x27;) {
+			var nullByte = frame.content.indexOf(&#x27;\u0000&#x27;);
+			id = frame.content.substring(0, nullByte);
+			frames[id] = frame.content.substring(nullByte + 1);
+		} else {
+			frames[id] = frames[frame.id] = frame.content;
+		}
+	}
+
+	return frames;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+The library defines three methods:
+
+```javascript
+// extract comments from OGG container
+AudioMetaData.ogg(buffer)
+
+// extract ID3v2 tags
+AudioMetaData.<span class="apidocCodeKeywordSpan">id3v2</span>(buffer);
+
+// extract ID3v1 tags
+AudioMetaData.id3v1(buffer);
+```
+
+The result is an object with the metadata. It attempts to normalize common keys:
+...</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.audio-metadata.ogg" id="apidoc.element.audio-metadata.ogg">
+        function <span class="apidocSignatureSpan">audio-metadata.</span>ogg
+        <span class="apidocSignatureSpan">(buffer)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">ogg = function (buffer) {
+	var view = utils.createView(buffer);
+
+	function parsePage(offset, withPacket) {
+		if (view.byteLength &#x3c; offset + 27) {
+			return null;
+		}
+
+		var numPageSegments = view.getUint8(offset + 26),
+			segmentTable = utils.readBytes(view, offset + 27, numPageSegments),
+			headerSize = 27 + numPageSegments;
+
+		if (!segmentTable.length) {
+			return null;
+		}
+
+		var
+			pageSize = headerSize + segmentTable.reduce(function(cur, next) {
+				return cur + next;
+			}),
+			length = headerSize + 1 + &#x27;vorbis&#x27;.length,
+			packetView = null;
+
+		if (withPacket) {
+			packetView = utils.createView(new ArrayBuffer(pageSize - length));
+			utils.readBytes(view, offset + length, pageSize - length, packetView);
+		}
+
+		return {
+			pageSize: pageSize,
+			packet: packetView
+		};
+	}
+
+	function parseComments(packet) {
+		try {
+			var vendorLength = packet.getUint32(0, true),
+				commentListLength = packet.getUint32(4 + vendorLength, true),
+				comments = {},
+				offset = 8 + vendorLength,
+				map = {
+					tracknumber: &#x27;track&#x27;
+				};
+
+			for (var i = 0; i &#x3c; commentListLength; i++) {
+				var commentLength = packet.getUint32(offset, true),
+					comment = utils.readUtf8(packet, offset + 4, commentLength),
+					equals = comment.indexOf(&#x27;=&#x27;),
+					key = comment.substring(0, equals).toLowerCase();
+
+				comments[map[key] || key] = comments[key] = utils.trimNull(comment.substring(equals + 1));
+				offset += 4 + commentLength;
+			}
+
+			return comments;
+		} catch (e) {
+			//all exceptions are just malformed/truncated data, so we just ignore them
+			return null;
+		}
+	}
+
+	var id = parsePage(0);
+	if (!id) {
+		return null;
+	}
+
+	var commentHeader = parsePage(id.pageSize, true);
+	if (!commentHeader) {
+		return null;
+	}
+
+	return parseComments(commentHeader.packet);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+The library operates solely on `ArrayBuffer`s, or `Buffer`s for Node&#x27;s convenience.
+So you&#x27;ll need to preload your audio data before using this library.
+
+The library defines three methods:
+
+```javascript
+// extract comments from OGG container
+AudioMetaData.<span class="apidocCodeKeywordSpan">ogg</span>(buffer)
+
+// extract ID3v2 tags
+AudioMetaData.id3v2(buffer);
+
+// extract ID3v1 tags
+AudioMetaData.id3v1(buffer);
+```
+...</pre></li>
+    </ul>
+
+
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.audio-metadata.id3v1" id="apidoc.module.audio-metadata.id3v1">module audio-metadata.id3v1</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.audio-metadata.id3v1.id3v1" id="apidoc.element.audio-metadata.id3v1.id3v1">
+        function <span class="apidocSignatureSpan">audio-metadata.</span>id3v1
+        <span class="apidocSignatureSpan">(buffer)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">id3v1 = function (buffer) {
+	//read last 128 bytes
+	var view = utils.createView(buffer);
+	if (!checkMagicId3v1(view)) {
+		return null;
+	}
+
+	function trim(value) {
+		return value.replace(/[\s\u0000]+$/, &#x27;&#x27;);
+	}
+
+	try {
+		var offset = view.byteLength - 128 + 3,
+			readAscii = utils.readAscii;
+		var title = readAscii(view, offset, 30),
+			artist = readAscii(view, offset + 30, 30),
+			album = readAscii(view, offset + 60, 30),
+			year = readAscii(view, offset + 90, 4);
+
+		offset += 94;
+
+		var comment = readAscii(view, offset, 28),
+			track = null;
+		offset += 28;
+		if (view.getUint8(offset) === 0) {
+			//next byte is the track
+			track = view.getUint8(offset + 1);
+		} else {
+			comment += readAscii(view, offset, 2);
+		}
+
+		offset += 2;
+		var genre = view.getUint8(offset);
+		return {
+			title: trim(title),
+			artist: trim(artist),
+			album: trim(album),
+			year: trim(year),
+			comment: trim(comment),
+			track: track,
+			genre: genre
+		};
+	} catch (e) {
+		return null;
+	}
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+// extract comments from OGG container
+AudioMetaData.ogg(buffer)
+
+// extract ID3v2 tags
+AudioMetaData.id3v2(buffer);
+
+// extract ID3v1 tags
+AudioMetaData.<span class="apidocCodeKeywordSpan">id3v1</span>(buffer);
+```
+
+The result is an object with the metadata. It attempts to normalize common keys:
+
+* &#x27;&#x27;title&#x27;&#x27;: (`TIT1` and `TIT2` in id3v2)
+* &#x27;&#x27;artist&#x27;&#x27; (`TSE1` in id3v2)
+* &#x27;&#x27;composer&#x27;&#x27; (`TCOM` in id3v2)
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.audio-metadata.id3v2" id="apidoc.module.audio-metadata.id3v2">module audio-metadata.id3v2</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.audio-metadata.id3v2.id3v2" id="apidoc.element.audio-metadata.id3v2.id3v2">
+        function <span class="apidocSignatureSpan">audio-metadata.</span>id3v2
+        <span class="apidocSignatureSpan">(buffer)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">id3v2 = function (buffer) {
+	var view = utils.createView(buffer);
+	if (!checkMagicId3(view, 0)) {
+		return null;
+	}
+
+	var offset = 3;
+	//var majorVersion = view.getUint8(offset);
+	offset += 2;
+	var flags = view.getUint8(offset);
+	offset++;
+	var size = getUint28(view, offset);
+	offset += 4;
+
+	var extendedHeader = (flags &#x26; 128) &#x3e; 0;
+
+	if (extendedHeader) {
+		offset += getUint28(view, offset);
+	}
+
+	function readFrame(offset) {
+		try {
+			var id = utils.readAscii(view, offset, 4);
+			var size = getUint28(view, offset + 4);
+			offset += 10; //+2 more for flags we don&#x27;t care about
+
+			if (id[0] !== &#x27;T&#x27;) {
+				return {
+					id: id,
+					size: size + 10
+				};
+			}
+
+			var encoding = view.getUint8(offset),
+				data = &#x27;&#x27;;
+
+			if (encoding &#x3c;= 3) {
+				offset++;
+				if (encoding === 3) {
+					//UTF8 - null terminated
+					data = utils.readUtf8(view, offset, size - 1);
+				} else {
+					//ISO-8859-1, UTF-16, UTF-16BE
+					//UTF-16 and UTF-16BE are $FF $00 terminated
+					//ISO is null terminated
+
+					//screw these encodings, read it as ascii
+					data = utils.readAscii(view, offset, size - 1);
+				}
+			} else {
+				//no encoding info, read it as ascii
+				data = utils.readAscii(view, offset, size);
+			}
+
+			//id3v2.4 is supposed to have encoding terminations, but sometimes
+			//they don&#x27;t? meh.
+			data = utils.trimNull(data);
+
+			return {
+				id: id,
+				size: size + 10,
+				content: data
+			};
+		} catch (e) {
+			return null;
+		}
+	}
+
+	var idMap = {
+		TALB: &#x27;album&#x27;,
+		TCOM: &#x27;composer&#x27;,
+		TIT1: &#x27;title&#x27;,
+		TIT2: &#x27;title&#x27;,
+		TPE1: &#x27;artist&#x27;,
+		TRCK: &#x27;track&#x27;,
+		TSSE: &#x27;encoder&#x27;,
+		TDRC: &#x27;year&#x27;,
+		TCON: &#x27;genre&#x27;
+	};
+
+	var endOfTags = offset + size,
+		frames = {};
+	while (offset &#x3c; endOfTags) {
+		var frame = readFrame(offset);
+		if (!frame) {
+			break;
+		}
+
+		offset += frame.size;
+		if (!frame.content) {
+			continue;
+		}
+		var id = idMap[frame.id] || frame.id;
+		if (id === &#x27;TXXX&#x27;) {
+			var nullByte = frame.content.indexOf(&#x27;\u0000&#x27;);
+			id = frame.content.substring(0, nullByte);
+			frames[id] = frame.content.substring(nullByte + 1);
+		} else {
+			frames[id] = frames[frame.id] = frame.content;
+		}
+	}
+
+	return frames;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+The library defines three methods:
+
+```javascript
+// extract comments from OGG container
+AudioMetaData.ogg(buffer)
+
+// extract ID3v2 tags
+AudioMetaData.<span class="apidocCodeKeywordSpan">id3v2</span>(buffer);
+
+// extract ID3v1 tags
+AudioMetaData.id3v1(buffer);
+```
+
+The result is an object with the metadata. It attempts to normalize common keys:
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.audio-metadata.ogg" id="apidoc.module.audio-metadata.ogg">module audio-metadata.ogg</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.audio-metadata.ogg.ogg" id="apidoc.element.audio-metadata.ogg.ogg">
+        function <span class="apidocSignatureSpan">audio-metadata.</span>ogg
+        <span class="apidocSignatureSpan">(buffer)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">ogg = function (buffer) {
+	var view = utils.createView(buffer);
+
+	function parsePage(offset, withPacket) {
+		if (view.byteLength &#x3c; offset + 27) {
+			return null;
+		}
+
+		var numPageSegments = view.getUint8(offset + 26),
+			segmentTable = utils.readBytes(view, offset + 27, numPageSegments),
+			headerSize = 27 + numPageSegments;
+
+		if (!segmentTable.length) {
+			return null;
+		}
+
+		var
+			pageSize = headerSize + segmentTable.reduce(function(cur, next) {
+				return cur + next;
+			}),
+			length = headerSize + 1 + &#x27;vorbis&#x27;.length,
+			packetView = null;
+
+		if (withPacket) {
+			packetView = utils.createView(new ArrayBuffer(pageSize - length));
+			utils.readBytes(view, offset + length, pageSize - length, packetView);
+		}
+
+		return {
+			pageSize: pageSize,
+			packet: packetView
+		};
+	}
+
+	function parseComments(packet) {
+		try {
+			var vendorLength = packet.getUint32(0, true),
+				commentListLength = packet.getUint32(4 + vendorLength, true),
+				comments = {},
+				offset = 8 + vendorLength,
+				map = {
+					tracknumber: &#x27;track&#x27;
+				};
+
+			for (var i = 0; i &#x3c; commentListLength; i++) {
+				var commentLength = packet.getUint32(offset, true),
+					comment = utils.readUtf8(packet, offset + 4, commentLength),
+					equals = comment.indexOf(&#x27;=&#x27;),
+					key = comment.substring(0, equals).toLowerCase();
+
+				comments[map[key] || key] = comments[key] = utils.trimNull(comment.substring(equals + 1));
+				offset += 4 + commentLength;
+			}
+
+			return comments;
+		} catch (e) {
+			//all exceptions are just malformed/truncated data, so we just ignore them
+			return null;
+		}
+	}
+
+	var id = parsePage(0);
+	if (!id) {
+		return null;
+	}
+
+	var commentHeader = parsePage(id.pageSize, true);
+	if (!commentHeader) {
+		return null;
+	}
+
+	return parseComments(commentHeader.packet);
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+The library operates solely on `ArrayBuffer`s, or `Buffer`s for Node&#x27;s convenience.
+So you&#x27;ll need to preload your audio data before using this library.
+
+The library defines three methods:
+
+```javascript
+// extract comments from OGG container
+AudioMetaData.<span class="apidocCodeKeywordSpan">ogg</span>(buffer)
+
+// extract ID3v2 tags
+AudioMetaData.id3v2(buffer);
+
+// extract ID3v1 tags
+AudioMetaData.id3v1(buffer);
+```
+...</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocSectionDiv">
+<h1><a href="#apidoc.module.audio-metadata.utils" id="apidoc.module.audio-metadata.utils">module audio-metadata.utils</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.audio-metadata.utils.createView" id="apidoc.element.audio-metadata.utils.createView">
+        function <span class="apidocSignatureSpan">audio-metadata.utils.</span>createView
+        <span class="apidocSignatureSpan">(buffer)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">createView = function (buffer) {
+		if (typeof(Buffer) !== &#x27;undefined&#x27; &#x26;&#x26; buffer instanceof Buffer) {
+			//convert nodejs buffers to ArrayBuffer
+			buffer = toArrayBuffer(buffer);
+		}
+
+		if (!(buffer instanceof ArrayBuffer)) {
+			throw new Error(&#x27;Expected instance of Buffer or ArrayBuffer&#x27;);
+		}
+
+		return new DataView(buffer);
+	}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.audio-metadata.utils.readAscii" id="apidoc.element.audio-metadata.utils.readAscii">
+        function <span class="apidocSignatureSpan">audio-metadata.utils.</span>readAscii
+        <span class="apidocSignatureSpan">(view, offset, length)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">readAscii = function (view, offset, length) {
+		if (view.byteLength &#x3c; offset + length) {
+			return &#x27;&#x27;;
+		}
+		var s = &#x27;&#x27;;
+		for (var i = 0; i &#x3c; length; i++) {
+			s += String.fromCharCode(view.getUint8(offset + i));
+		}
+
+		return s;
+	}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.audio-metadata.utils.readBytes" id="apidoc.element.audio-metadata.utils.readBytes">
+        function <span class="apidocSignatureSpan">audio-metadata.utils.</span>readBytes
+        <span class="apidocSignatureSpan">(view, offset, length, target)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">readBytes = function (view, offset, length, target) {
+		if (offset + length &#x3c; 0) {
+			return [];
+		}
+
+		var bytes = [];
+		var max = Math.min(offset + length, view.byteLength);
+		for (var i = offset; i &#x3c; max; i++) {
+			var value = view.getUint8(i);
+			bytes.push(value);
+			if (target) {
+				target.setUint8(i - offset, value);
+			}
+		}
+
+		return bytes;
+	}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.audio-metadata.utils.readUtf8" id="apidoc.element.audio-metadata.utils.readUtf8">
+        function <span class="apidocSignatureSpan">audio-metadata.utils.</span>readUtf8
+        <span class="apidocSignatureSpan">(view, offset, length)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">readUtf8 = function (view, offset, length) {
+		if (view.byteLength &#x3c; offset + length) {
+			return &#x27;&#x27;;
+		}
+
+		var buffer = view.buffer.slice(offset, offset + length);
+
+		//http://stackoverflow.com/a/17192845 - convert byte array to UTF8 string
+		var encodedString = String.fromCharCode.apply(null, new Uint8Array(buffer));
+		return decodeURIComponent(escape(encodedString));
+	}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.audio-metadata.utils.trimNull" id="apidoc.element.audio-metadata.utils.trimNull">
+        function <span class="apidocSignatureSpan">audio-metadata.utils.</span>trimNull
+        <span class="apidocSignatureSpan">(s)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">trimNull = function (s) {
+		return s.replace(/\u0000+$/, &#x27;&#x27;);
+	}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+</div>
+
+<div class="apidocFooterDiv">
+    [ this document was created with
+    <a href="https://github.com/kaizhu256/node-utility2" target="_blank">utility2</a>
+    ]
+</div>
+</div>
