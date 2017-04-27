@@ -1,6 +1,6 @@
 # npmdoc-audio-metadata
 
-#### api documentation for  [audio-metadata (v0.3.0)](https://github.com/tmont/audio-metadata)  [![npm package](https://img.shields.io/npm/v/npmdoc-audio-metadata.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-audio-metadata) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-audio-metadata.svg)](https://travis-ci.org/npmdoc/node-npmdoc-audio-metadata)
+#### basic api documentation for  [audio-metadata (v0.3.0)](https://github.com/tmont/audio-metadata)  [![npm package](https://img.shields.io/npm/v/npmdoc-audio-metadata.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-audio-metadata) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-audio-metadata.svg)](https://travis-ci.org/npmdoc/node-npmdoc-audio-metadata)
 
 #### Extract metadata from audio files
 
