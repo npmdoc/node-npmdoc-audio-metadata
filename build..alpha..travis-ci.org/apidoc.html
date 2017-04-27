@@ -90,44 +90,42 @@
 
         <li>
 
+            <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">audio-metadata.</span>index</span>
+
+        </li>
+
+        <li>
+
             <span class="apidocSignatureSpan">object <span class="apidocSignatureSpan">audio-metadata.</span>utils</span>
 
         </li>
 
     </ol></li>
 
-    <li class="apidocModuleLi"><a href="#apidoc.module.audio-metadata.id3v1">module audio-metadata.id3v1</a><ol>
+    <li class="apidocModuleLi"><a href="#apidoc.module.audio-metadata.index">module audio-metadata.index</a><ol>
 
         <li>
 
-            <a class="apidocElementLiA" href="#apidoc.element.audio-metadata.id3v1.id3v1">
-            function <span class="apidocSignatureSpan">audio-metadata.</span>id3v1
+            <a class="apidocElementLiA" href="#apidoc.element.audio-metadata.index.id3v1">
+            function <span class="apidocSignatureSpan">audio-metadata.index.</span>id3v1
             <span class="apidocSignatureSpan">(buffer)</span>
             </a>
 
         </li>
 
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.audio-metadata.id3v2">module audio-metadata.id3v2</a><ol>
-
         <li>
 
-            <a class="apidocElementLiA" href="#apidoc.element.audio-metadata.id3v2.id3v2">
-            function <span class="apidocSignatureSpan">audio-metadata.</span>id3v2
+            <a class="apidocElementLiA" href="#apidoc.element.audio-metadata.index.id3v2">
+            function <span class="apidocSignatureSpan">audio-metadata.index.</span>id3v2
             <span class="apidocSignatureSpan">(buffer)</span>
             </a>
 
         </li>
 
-    </ol></li>
-
-    <li class="apidocModuleLi"><a href="#apidoc.module.audio-metadata.ogg">module audio-metadata.ogg</a><ol>
-
         <li>
 
-            <a class="apidocElementLiA" href="#apidoc.element.audio-metadata.ogg.ogg">
-            function <span class="apidocSignatureSpan">audio-metadata.</span>ogg
+            <a class="apidocElementLiA" href="#apidoc.element.audio-metadata.index.ogg">
+            function <span class="apidocSignatureSpan">audio-metadata.index.</span>ogg
             <span class="apidocSignatureSpan">(buffer)</span>
             </a>
 
@@ -244,21 +242,22 @@
 	}
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-// extract comments from OGG container
-AudioMetaData.ogg(buffer)
-
-// extract ID3v2 tags
-AudioMetaData.id3v2(buffer);
-
-// extract ID3v1 tags
-AudioMetaData.<span class="apidocCodeKeywordSpan">id3v1</span>(buffer);
-```
-
-The result is an object with the metadata. It attempts to normalize common keys:
-
-* &#x27;&#x27;title&#x27;&#x27;: (`TIT1` and `TIT2` in id3v2)
-* &#x27;&#x27;artist&#x27;&#x27; (`TSE1` in id3v2)
-* &#x27;&#x27;composer&#x27;&#x27; (`TCOM` in id3v2)
+  {
+    &#x22;name&#x22;: &#x22;tmont&#x22;,
+    &#x22;email&#x22;: &#x22;tommy.mont@gmail.com&#x22;
+  }
+],
+&#x22;name&#x22;: &#x22;audio-metadata&#x22;,
+&#x22;optionalDependencies&#x22;: {},
+&#x22;readme&#x22;: &#x22;# audio-metadata\n\n[![Build Status](https://travis-ci.org/tmont/audio-metadata.png)](https://travis-ci
+.org/tmont/audio-metadata)\n[![NPM version](https://badge.fury.io/js/audio-metadata.png)](http://badge.fury.io/js/audio-metadata)\n\nThis is a tinyish (2.1K gzipped) library to extract metadata from audio files.\nSpecifically, it can extract [ID3v1](http://en.wikipedia.org/wiki/ID3#ID3v1),\n[ID3v2](http://en.wikipedia.org/wiki/ID3#ID3v2) and\n[Vorbis comments](http://www.xiph.org/vorbis/doc/v-comment.html)\n(i.e. metadata in [OGG containers](http://en.wikipedia.org/wiki/Ogg)).\n\nLicensed under the [WTFPL](http://www.wtfpl.net/).\n\n## What is this good for?\nThe purpose of this library is to be very fast and small. It&#x27;s suitable\nfor server-side or client-side. Really any platform that supports\n`ArrayBuffer` and its ilk (`Uint8Array`, etc.).\n\nI wrote it because the other libraries were large and very robust; I just\nneeded something that could extract the metadata out without requiring\n30KB of JavaScript. `audio-metadata.min.js` comes in at 6.1K/2.1K\nminified/gzipped.\n\nTo accomplish the small size and speed, it sacrifices several things.\n\n1. It&#x27;s very naive. For example, the OGG format stipulates that the comment\n   header must come second, after the identification header. This library\n   assumes that&#x27;s always true and ignores the header type byte.\n2. Text encoding is for losers. ID3v2 in particular has a lot of flexibility in\n   terms of the encoding of text for ID3 frames. This library will handle UTF8\n   properly, but everything else is just spit out as ASCII.\n3. It assumes that ID3v2 tags are always the very first thing in the file (as they\n   should be). The spec is mum on whether that&#x27;s &#x27;&#x27;required&#x27;&#x27;, but this library\n   assumes it is.\n4. ID3v1.1 (extended tags with \&#x22;TAG+\&#x22;) are not supported; Wikipedia suggests they\n   aren&#x27;t really well-supported in media players anyway.\n\nAs such, the code is a bit abstruse, in that you&#x27;ll see some magic numbers, like\n`offset += 94` where it&#x27;s ignoring a bunch of header data to get to the good stuff.\nDon&#x27;t judge me based on this code. It works and it&#x27;s tested; it&#x27;s just hard to\nread.\n\nOf course, since this isn&#x27;t an actual parser, invalid files will also work. This\nmeans, for example, you could only read the first couple hundred bytes of an MP3\nfile and still extract the metadata from it, rather than requiring actual valid\nMP3 data.\n\n## Usage\nThe library operates solely on `ArrayBuffer`s, or `Buffer`s for Node&#x27;s convenience.\nSo you&#x27;ll need to preload your audio data before using this library.\n\nThe library defines three methods:\n\n```javascript\n// extract comments from OGG container\nAudioMetaData.ogg(buffer)\n\n// extract ID3v2 tags\nAudioMetaData.id3v2(buffer);\n\n// extract ID3v1 tags\nAudioMetaData.<span class="apidocCodeKeywordSpan">id3v1</span>(buffer);\n```\n\nThe result is an object with the metadata. It attempts to normalize common keys:\n\n* &#x27;&#x27;title&#x27;&#x27;: (`TIT1` and `TIT2` in id3v2)\n* &#x27;&#x27;artist&#x27;&#x27; (`TSE1` in id3v2)\n* &#x27;&#x27;composer&#x27;&#x27; (`TCOM` in id3v2)\n* &#x27;&#x27;album&#x27;&#x27; (`TALB` in id3v2)\n* &#x27;&#x27;track&#x27;&#x27; (`TRCK` in id3v2, commonly `TRACKNUMBER` in vorbis comments)\n* &#x27;&#x27;year&#x27;&#x27; (`TDRC` (date recorded) is used in id3v2)\n* &#x27;&#x27;encoder&#x27;&#x27; (`TSSE` in id3v2)\n* &#x27;&#x27;genre&#x27;&#x27; (`TCON` in id3v2)\n\nEverything else will be keyed by its original name. For id3v2,\nanything that is not a text identifier (i.e. a frame that starts with a\n\&#x22;T\&#x22;) is ignored. This includes comments (`COMM`).\n\n### Node\nInstall it using NPM: `npm install audio-metadata` or `npm install -g audio-metadata`\nif you want to use it from the shell.\n\n```javascript\nvar audioMetaData = require(&#x27;audio-metadata&#x27;),\n\tfs = require(&#x27;fs&#x27;);\n\nvar oggData = fs.readFileSync(&#x27;/path/to/my.ogg&#x27;);\nvar metadata = audioMetaData.ogg(oggData);\n/*\n{\n  \&#x22;title\&#x22;: \&#x22;Contra Base Snippet\&#x22;,\n  \&#x22;artist\&#x22;: \&#x22;Konami\&#x22;,\n  \&#x22;album\&#x22;: \&#x22;Bill and Lance&#x27;s Excellent Adventure\&#x22;,\n  \&#x22;year\&#x22;: \&#x22;1988\&#x22;,\n  \&#x22;tracknumber\&#x22;: \&#x22;1\&#x22;,\n  \&#x22;track\&#x22;: \&#x22;1\&#x22;,\n  \&#x22;encoder\&#x22;: \&#x22;Lavf53.21.1\&#x22;\n}\n*/\n```\n\n#### From the Shell\n```\nExtract metadata from audio files\n\nUSAGE\naudio-metadata --type &#x3c;type&#x3e; [options] file1 [file2...]\n\nOPTIONS\n--help,-h\n  This help\n--type,-t &#x3c;type&#x3e;\n  One of \&#x22;id3v1\&#x22;, \&#x22;id3v2\&#x22; or \&#x22;ogg\&#x22;\n--chunk-size,-c &#x3c;size&#x3e;\n  Read the file in chunks of &#x3c;size&#x3e;; default is 512\n--quit-after,-q &#x3c;length&#x3e;\n  Stop searching for metadata if nothing is found after\n  &#x3c;length&#x3e; bytes; default is 512\n--no-colors,-z\n  Don&#x27;t colorize the output\n\nEXAMPLE\nSearch for metadata in the first 300 bytes in 100 byte increments\n audio-metadata -t id3v2 -c 100 -q 300 keepitoffmy.wav\n ```\n\n### Browser\nThis library has been tested on current versions of Firefox and Chrome. IE\nmight work, since it apparently supports `ArrayBuffer`. Safari/Opera are\nprobably okayish since they&#x27;re webkit. Your mileage may vary.\n\nLoading `audio-metadata.min.js` will define the `AudioMetadata` global variable.\n\n```html\n&#x3c;script type=\&#x22;text/javascript\&#x22; src=\&#x22;audio-metadata.min.js\&#x22;&#x3e;&#x3c;/script&#x3e;\n&#x3c;script type=\&#x22;text/javascript\&#x22;&#x3e;\n\tvar req = new XMLHttpRequest();\n\treq.open(&#x27;GET&#x27;, &#x27;http://example.com/sofine.mp3&#x27;, true);\n\treq.responseType = &#x27;arraybuffer&#x27;;\n\n\treq.onload = function() {\n\t\tvar metadata = AudioMetaData.id3v2(req.response);\n\t\t/*\n\t\t\t{\n\t\t\t\t\&#x22;TIT2\&#x22;: \&#x22;Foobar\&#x22;,\n\t\t\t\t\&#x22;title\&#x22;: \&#x22;Foobar\&#x22;,\n\t\t\t\t\&#x22;TPE1\&#x22;: \&#x22;The Foobars\&#x22;,\n\t\t\t\t\&#x22;artist\&#x22;: \&#x22;The Foobars\&#x22;,\n\t\t\t\t\&#x22;TALB\&#x22;: \&#x22;FUBAR\&#x22;,\n\t\t\t\t\&#x22;album\&#x22;: \&#x22;FUBAR\&#x22;,\n\t\t\t\t\&#x22;year\&#x22;: \&#x22;2014\&#x22;,\n\t\t\t\t\&#x22;TRCK\&#x22;: \&#x22;9\&#x22;,\n\t\t\t\t\&#x22;track\&#x22;: \&#x22;9\&#x22;,\n\t\t\t\t\&#x22;TSSE\&#x22;: \&#x22;Lavf53.21.1\&#x22;,\n\t\t\t\t\&#x22;encoder\&#x22;: \&#x22;Lavf53.21.1\&#x22;\n\t\t\t}\n\t\t*/\n\t};\n\n\treq.send(null);\n&#x3c;/script&#x3e;\n```\n\n## Development\n```bash\ngit clone git@github.com:tmont/audio-metadata.js\ncd audio-metadata\nnpm install\nnpm test\n```\n\nThere&#x27;s a \&#x22;test\&#x22; (yeah, yeah) for browsers, which you can view\nby running `npm start` and then pointing your browser at\n[http://localhost:24578/tests/browser/](http://localhost:24578/tests/browser/).\n\nTo build the minified browserified file, run `npm run minify`.\n&#x22;,
+&#x22;readmeFilename&#x22;: &#x22;README.md&#x22;,
+&#x22;repository&#x22;: {
+  &#x22;type&#x22;: &#x22;git&#x22;,
+  &#x22;url&#x22;: &#x22;git+https://github.com/tmont/audio-metadata.git&#x22;
+},
+&#x22;scripts&#x22;: {
+  &#x22;build&#x22;: &#x22;./node_modules/.bin/browserify -s AudioMetadata -e index.js --bare &#x3e; audio-metadata.js&#x22;,
 ...</pre></li>
     </ul>
 
@@ -376,20 +375,22 @@ The result is an object with the metadata. It attempts to normalize common keys:
 	return frames;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-The library defines three methods:
-
-```javascript
-// extract comments from OGG container
-AudioMetaData.ogg(buffer)
-
-// extract ID3v2 tags
-AudioMetaData.<span class="apidocCodeKeywordSpan">id3v2</span>(buffer);
-
-// extract ID3v1 tags
-AudioMetaData.id3v1(buffer);
-```
-
-The result is an object with the metadata. It attempts to normalize common keys:
+  {
+    &#x22;name&#x22;: &#x22;tmont&#x22;,
+    &#x22;email&#x22;: &#x22;tommy.mont@gmail.com&#x22;
+  }
+],
+&#x22;name&#x22;: &#x22;audio-metadata&#x22;,
+&#x22;optionalDependencies&#x22;: {},
+&#x22;readme&#x22;: &#x22;# audio-metadata\n\n[![Build Status](https://travis-ci.org/tmont/audio-metadata.png)](https://travis-ci
+.org/tmont/audio-metadata)\n[![NPM version](https://badge.fury.io/js/audio-metadata.png)](http://badge.fury.io/js/audio-metadata)\n\nThis is a tinyish (2.1K gzipped) library to extract metadata from audio files.\nSpecifically, it can extract [ID3v1](http://en.wikipedia.org/wiki/ID3#ID3v1),\n[ID3v2](http://en.wikipedia.org/wiki/ID3#ID3v2) and\n[Vorbis comments](http://www.xiph.org/vorbis/doc/v-comment.html)\n(i.e. metadata in [OGG containers](http://en.wikipedia.org/wiki/Ogg)).\n\nLicensed under the [WTFPL](http://www.wtfpl.net/).\n\n## What is this good for?\nThe purpose of this library is to be very fast and small. It&#x27;s suitable\nfor server-side or client-side. Really any platform that supports\n`ArrayBuffer` and its ilk (`Uint8Array`, etc.).\n\nI wrote it because the other libraries were large and very robust; I just\nneeded something that could extract the metadata out without requiring\n30KB of JavaScript. `audio-metadata.min.js` comes in at 6.1K/2.1K\nminified/gzipped.\n\nTo accomplish the small size and speed, it sacrifices several things.\n\n1. It&#x27;s very naive. For example, the OGG format stipulates that the comment\n   header must come second, after the identification header. This library\n   assumes that&#x27;s always true and ignores the header type byte.\n2. Text encoding is for losers. ID3v2 in particular has a lot of flexibility in\n   terms of the encoding of text for ID3 frames. This library will handle UTF8\n   properly, but everything else is just spit out as ASCII.\n3. It assumes that ID3v2 tags are always the very first thing in the file (as they\n   should be). The spec is mum on whether that&#x27;s &#x27;&#x27;required&#x27;&#x27;, but this library\n   assumes it is.\n4. ID3v1.1 (extended tags with \&#x22;TAG+\&#x22;) are not supported; Wikipedia suggests they\n   aren&#x27;t really well-supported in media players anyway.\n\nAs such, the code is a bit abstruse, in that you&#x27;ll see some magic numbers, like\n`offset += 94` where it&#x27;s ignoring a bunch of header data to get to the good stuff.\nDon&#x27;t judge me based on this code. It works and it&#x27;s tested; it&#x27;s just hard to\nread.\n\nOf course, since this isn&#x27;t an actual parser, invalid files will also work. This\nmeans, for example, you could only read the first couple hundred bytes of an MP3\nfile and still extract the metadata from it, rather than requiring actual valid\nMP3 data.\n\n## Usage\nThe library operates solely on `ArrayBuffer`s, or `Buffer`s for Node&#x27;s convenience.\nSo you&#x27;ll need to preload your audio data before using this library.\n\nThe library defines three methods:\n\n```javascript\n// extract comments from OGG container\nAudioMetaData.ogg(buffer)\n\n// extract ID3v2 tags\nAudioMetaData.<span class="apidocCodeKeywordSpan">id3v2</span>(buffer);\n\n// extract ID3v1 tags\nAudioMetaData.id3v1(buffer);\n```\n\nThe result is an object with the metadata. It attempts to normalize common keys:\n\n* &#x27;&#x27;title&#x27;&#x27;: (`TIT1` and `TIT2` in id3v2)\n* &#x27;&#x27;artist&#x27;&#x27; (`TSE1` in id3v2)\n* &#x27;&#x27;composer&#x27;&#x27; (`TCOM` in id3v2)\n* &#x27;&#x27;album&#x27;&#x27; (`TALB` in id3v2)\n* &#x27;&#x27;track&#x27;&#x27; (`TRCK` in id3v2, commonly `TRACKNUMBER` in vorbis comments)\n* &#x27;&#x27;year&#x27;&#x27; (`TDRC` (date recorded) is used in id3v2)\n* &#x27;&#x27;encoder&#x27;&#x27; (`TSSE` in id3v2)\n* &#x27;&#x27;genre&#x27;&#x27; (`TCON` in id3v2)\n\nEverything else will be keyed by its original name. For id3v2,\nanything that is not a text identifier (i.e. a frame that starts with a\n\&#x22;T\&#x22;) is ignored. This includes comments (`COMM`).\n\n### Node\nInstall it using NPM: `npm install audio-metadata` or `npm install -g audio-metadata`\nif you want to use it from the shell.\n\n```javascript\nvar audioMetaData = require(&#x27;audio-metadata&#x27;),\n\tfs = require(&#x27;fs&#x27;);\n\nvar oggData = fs.readFileSync(&#x27;/path/to/my.ogg&#x27;);\nvar metadata = audioMetaData.ogg(oggData);\n/*\n{\n  \&#x22;title\&#x22;: \&#x22;Contra Base Snippet\&#x22;,\n  \&#x22;artist\&#x22;: \&#x22;Konami\&#x22;,\n  \&#x22;album\&#x22;: \&#x22;Bill and Lance&#x27;s Excellent Adventure\&#x22;,\n  \&#x22;year\&#x22;: \&#x22;1988\&#x22;,\n  \&#x22;tracknumber\&#x22;: \&#x22;1\&#x22;,\n  \&#x22;track\&#x22;: \&#x22;1\&#x22;,\n  \&#x22;encoder\&#x22;: \&#x22;Lavf53.21.1\&#x22;\n}\n*/\n```\n\n#### From the Shell\n```\nExtract metadata from audio files\n\nUSAGE\naudio-metadata --type &#x3c;type&#x3e; [options] file1 [file2...]\n\nOPTIONS\n--help,-h\n  This help\n--type,-t &#x3c;type&#x3e;\n  One of \&#x22;id3v1\&#x22;, \&#x22;id3v2\&#x22; or \&#x22;ogg\&#x22;\n--chunk-size,-c &#x3c;size&#x3e;\n  Read the file in chunks of &#x3c;size&#x3e;; default is 512\n--quit-after,-q &#x3c;length&#x3e;\n  Stop searching for metadata if nothing is found after\n  &#x3c;length&#x3e; bytes; default is 512\n--no-colors,-z\n  Don&#x27;t colorize the output\n\nEXAMPLE\nSearch for metadata in the first 300 bytes in 100 byte increments\n audio-metadata -t id3v2 -c 100 -q 300 keepitoffmy.wav\n ```\n\n### Browser\nThis library has been tested on current versions of Firefox and Chrome. IE\nmight work, since it apparently supports `ArrayBuffer`. Safari/Opera are\nprobably okayish since they&#x27;re webkit. Your mileage may vary.\n\nLoading `audio-metadata.min.js` will define the `AudioMetadata` global variable.\n\n```html\n&#x3c;script type=\&#x22;text/javascript\&#x22; src=\&#x22;audio-metadata.min.js\&#x22;&#x3e;&#x3c;/script&#x3e;\n&#x3c;script type=\&#x22;text/javascript\&#x22;&#x3e;\n\tvar req = new XMLHttpRequest();\n\treq.open(&#x27;GET&#x27;, &#x27;http://example.com/sofine.mp3&#x27;, true);\n\treq.responseType = &#x27;arraybuffer&#x27;;\n\n\treq.onload = function() {\n\t\tvar metadata = AudioMetaData.id3v2(req.response);\n\t\t/*\n\t\t\t{\n\t\t\t\t\&#x22;TIT2\&#x22;: \&#x22;Foobar\&#x22;,\n\t\t\t\t\&#x22;title\&#x22;: \&#x22;Foobar\&#x22;,\n\t\t\t\t\&#x22;TPE1\&#x22;: \&#x22;The Foobars\&#x22;,\n\t\t\t\t\&#x22;artist\&#x22;: \&#x22;The Foobars\&#x22;,\n\t\t\t\t\&#x22;TALB\&#x22;: \&#x22;FUBAR\&#x22;,\n\t\t\t\t\&#x22;album\&#x22;: \&#x22;FUBAR\&#x22;,\n\t\t\t\t\&#x22;year\&#x22;: \&#x22;2014\&#x22;,\n\t\t\t\t\&#x22;TRCK\&#x22;: \&#x22;9\&#x22;,\n\t\t\t\t\&#x22;track\&#x22;: \&#x22;9\&#x22;,\n\t\t\t\t\&#x22;TSSE\&#x22;: \&#x22;Lavf53.21.1\&#x22;,\n\t\t\t\t\&#x22;encoder\&#x22;: \&#x22;Lavf53.21.1\&#x22;\n\t\t\t}\n\t\t*/\n\t};\n\n\treq.send(null);\n&#x3c;/script&#x3e;\n```\n\n## Development\n```bash\ngit clone git@github.com:tmont/audio-metadata.js\ncd audio-metadata\nnpm install\nnpm test\n```\n\nThere&#x27;s a \&#x22;test\&#x22; (yeah, yeah) for browsers, which you can view\nby running `npm start` and then pointing your browser at\n[http://localhost:24578/tests/browser/](http://localhost:24578/tests/browser/).\n\nTo build the minified browserified file, run `npm run minify`.\n&#x22;,
+&#x22;readmeFilename&#x22;: &#x22;README.md&#x22;,
+&#x22;repository&#x22;: {
+  &#x22;type&#x22;: &#x22;git&#x22;,
+  &#x22;url&#x22;: &#x22;git+https://github.com/tmont/audio-metadata.git&#x22;
+},
+&#x22;scripts&#x22;: {
+  &#x22;build&#x22;: &#x22;./node_modules/.bin/browserify -s AudioMetadata -e index.js --bare &#x3e; audio-metadata.js&#x22;,
 ...</pre></li>
     </ul>
 
@@ -476,23 +477,26 @@ The result is an object with the metadata. It attempts to normalize common keys:
 	return parseComments(commentHeader.packet);
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-The library operates solely on `ArrayBuffer`s, or `Buffer`s for Node&#x27;s convenience.
-So you&#x27;ll need to preload your audio data before using this library.
-
-The library defines three methods:
-
-```javascript
-// extract comments from OGG container
-AudioMetaData.<span class="apidocCodeKeywordSpan">ogg</span>(buffer)
-
-// extract ID3v2 tags
-AudioMetaData.id3v2(buffer);
-
-// extract ID3v1 tags
-AudioMetaData.id3v1(buffer);
-```
+  {
+    &#x22;name&#x22;: &#x22;tmont&#x22;,
+    &#x22;email&#x22;: &#x22;tommy.mont@gmail.com&#x22;
+  }
+],
+&#x22;name&#x22;: &#x22;audio-metadata&#x22;,
+&#x22;optionalDependencies&#x22;: {},
+&#x22;readme&#x22;: &#x22;# audio-metadata\n\n[![Build Status](https://travis-ci.org/tmont/audio-metadata.png)](https://travis-ci
+.org/tmont/audio-metadata)\n[![NPM version](https://badge.fury.io/js/audio-metadata.png)](http://badge.fury.io/js/audio-metadata)\n\nThis is a tinyish (2.1K gzipped) library to extract metadata from audio files.\nSpecifically, it can extract [ID3v1](http://en.wikipedia.org/wiki/ID3#ID3v1),\n[ID3v2](http://en.wikipedia.org/wiki/ID3#ID3v2) and\n[Vorbis comments](http://www.xiph.org/vorbis/doc/v-comment.html)\n(i.e. metadata in [OGG containers](http://en.wikipedia.org/wiki/Ogg)).\n\nLicensed under the [WTFPL](http://www.wtfpl.net/).\n\n## What is this good for?\nThe purpose of this library is to be very fast and small. It&#x27;s suitable\nfor server-side or client-side. Really any platform that supports\n`ArrayBuffer` and its ilk (`Uint8Array`, etc.).\n\nI wrote it because the other libraries were large and very robust; I just\nneeded something that could extract the metadata out without requiring\n30KB of JavaScript. `audio-metadata.min.js` comes in at 6.1K/2.1K\nminified/gzipped.\n\nTo accomplish the small size and speed, it sacrifices several things.\n\n1. It&#x27;s very naive. For example, the OGG format stipulates that the comment\n   header must come second, after the identification header. This library\n   assumes that&#x27;s always true and ignores the header type byte.\n2. Text encoding is for losers. ID3v2 in particular has a lot of flexibility in\n   terms of the encoding of text for ID3 frames. This library will handle UTF8\n   properly, but everything else is just spit out as ASCII.\n3. It assumes that ID3v2 tags are always the very first thing in the file (as they\n   should be). The spec is mum on whether that&#x27;s &#x27;&#x27;required&#x27;&#x27;, but this library\n   assumes it is.\n4. ID3v1.1 (extended tags with \&#x22;TAG+\&#x22;) are not supported; Wikipedia suggests they\n   aren&#x27;t really well-supported in media players anyway.\n\nAs such, the code is a bit abstruse, in that you&#x27;ll see some magic numbers, like\n`offset += 94` where it&#x27;s ignoring a bunch of header data to get to the good stuff.\nDon&#x27;t judge me based on this code. It works and it&#x27;s tested; it&#x27;s just hard to\nread.\n\nOf course, since this isn&#x27;t an actual parser, invalid files will also work. This\nmeans, for example, you could only read the first couple hundred bytes of an MP3\nfile and still extract the metadata from it, rather than requiring actual valid\nMP3 data.\n\n## Usage\nThe library operates solely on `ArrayBuffer`s, or `Buffer`s for Node&#x27;s convenience.\nSo you&#x27;ll need to preload your audio data before using this library.\n\nThe library defines three methods:\n\n```javascript\n// extract comments from OGG container\nAudioMetaData.<span class="apidocCodeKeywordSpan">ogg</span>(buffer)\n\n// extract ID3v2 tags\nAudioMetaData.id3v2(buffer);\n\n// extract ID3v1 tags\nAudioMetaData.id3v1(buffer);\n```\n\nThe result is an object with the metadata. It attempts to normalize common keys:\n\n* &#x27;&#x27;title&#x27;&#x27;: (`TIT1` and `TIT2` in id3v2)\n* &#x27;&#x27;artist&#x27;&#x27; (`TSE1` in id3v2)\n* &#x27;&#x27;composer&#x27;&#x27; (`TCOM` in id3v2)\n* &#x27;&#x27;album&#x27;&#x27; (`TALB` in id3v2)\n* &#x27;&#x27;track&#x27;&#x27; (`TRCK` in id3v2, commonly `TRACKNUMBER` in vorbis comments)\n* &#x27;&#x27;year&#x27;&#x27; (`TDRC` (date recorded) is used in id3v2)\n* &#x27;&#x27;encoder&#x27;&#x27; (`TSSE` in id3v2)\n* &#x27;&#x27;genre&#x27;&#x27; (`TCON` in id3v2)\n\nEverything else will be keyed by its original name. For id3v2,\nanything that is not a text identifier (i.e. a frame that starts with a\n\&#x22;T\&#x22;) is ignored. This includes comments (`COMM`).\n\n### Node\nInstall it using NPM: `npm install audio-metadata` or `npm install -g audio-metadata`\nif you want to use it from the shell.\n\n```javascript\nvar audioMetaData = require(&#x27;audio-metadata&#x27;),\n\tfs = require(&#x27;fs&#x27;);\n\nvar oggData = fs.readFileSync(&#x27;/path/to/my.ogg&#x27;);\nvar metadata = audioMetaData.ogg(oggData);\n/*\n{\n  \&#x22;title\&#x22;: \&#x22;Contra Base Snippet\&#x22;,\n  \&#x22;artist\&#x22;: \&#x22;Konami\&#x22;,\n  \&#x22;album\&#x22;: \&#x22;Bill and Lance&#x27;s Excellent Adventure\&#x22;,\n  \&#x22;year\&#x22;: \&#x22;1988\&#x22;,\n  \&#x22;tracknumber\&#x22;: \&#x22;1\&#x22;,\n  \&#x22;track\&#x22;: \&#x22;1\&#x22;,\n  \&#x22;encoder\&#x22;: \&#x22;Lavf53.21.1\&#x22;\n}\n*/\n```\n\n#### From the Shell\n```\nExtract metadata from audio files\n\nUSAGE\naudio-metadata --type &#x3c;type&#x3e; [options] file1 [file2...]\n\nOPTIONS\n--help,-h\n  This help\n--type,-t &#x3c;type&#x3e;\n  One of \&#x22;id3v1\&#x22;, \&#x22;id3v2\&#x22; or \&#x22;ogg\&#x22;\n--chunk-size,-c &#x3c;size&#x3e;\n  Read the file in chunks of &#x3c;size&#x3e;; default is 512\n--quit-after,-q &#x3c;length&#x3e;\n  Stop searching for metadata if nothing is found after\n  &#x3c;length&#x3e; bytes; default is 512\n--no-colors,-z\n  Don&#x27;t colorize the output\n\nEXAMPLE\nSearch for metadata in the first 300 bytes in 100 byte increments\n audio-metadata -t id3v2 -c 100 -q 300 keepitoffmy.wav\n ```\n\n### Browser\nThis library has been tested on current versions of Firefox and Chrome. IE\nmight work, since it apparently supports `ArrayBuffer`. Safari/Opera are\nprobably okayish since they&#x27;re webkit. Your mileage may vary.\n\nLoading `audio-metadata.min.js` will define the `AudioMetadata` global variable.\n\n```html\n&#x3c;script type=\&#x22;text/javascript\&#x22; src=\&#x22;audio-metadata.min.js\&#x22;&#x3e;&#x3c;/script&#x3e;\n&#x3c;script type=\&#x22;text/javascript\&#x22;&#x3e;\n\tvar req = new XMLHttpRequest();\n\treq.open(&#x27;GET&#x27;, &#x27;http://example.com/sofine.mp3&#x27;, true);\n\treq.responseType = &#x27;arraybuffer&#x27;;\n\n\treq.onload = function() {\n\t\tvar metadata = AudioMetaData.id3v2(req.response);\n\t\t/*\n\t\t\t{\n\t\t\t\t\&#x22;TIT2\&#x22;: \&#x22;Foobar\&#x22;,\n\t\t\t\t\&#x22;title\&#x22;: \&#x22;Foobar\&#x22;,\n\t\t\t\t\&#x22;TPE1\&#x22;: \&#x22;The Foobars\&#x22;,\n\t\t\t\t\&#x22;artist\&#x22;: \&#x22;The Foobars\&#x22;,\n\t\t\t\t\&#x22;TALB\&#x22;: \&#x22;FUBAR\&#x22;,\n\t\t\t\t\&#x22;album\&#x22;: \&#x22;FUBAR\&#x22;,\n\t\t\t\t\&#x22;year\&#x22;: \&#x22;2014\&#x22;,\n\t\t\t\t\&#x22;TRCK\&#x22;: \&#x22;9\&#x22;,\n\t\t\t\t\&#x22;track\&#x22;: \&#x22;9\&#x22;,\n\t\t\t\t\&#x22;TSSE\&#x22;: \&#x22;Lavf53.21.1\&#x22;,\n\t\t\t\t\&#x22;encoder\&#x22;: \&#x22;Lavf53.21.1\&#x22;\n\t\t\t}\n\t\t*/\n\t};\n\n\treq.send(null);\n&#x3c;/script&#x3e;\n```\n\n## Development\n```bash\ngit clone git@github.com:tmont/audio-metadata.js\ncd audio-metadata\nnpm install\nnpm test\n```\n\nThere&#x27;s a \&#x22;test\&#x22; (yeah, yeah) for browsers, which you can view\nby running `npm start` and then pointing your browser at\n[http://localhost:24578/tests/browser/](http://localhost:24578/tests/browser/).\n\nTo build the minified browserified file, run `npm run minify`.\n&#x22;,
+&#x22;readmeFilename&#x22;: &#x22;README.md&#x22;,
+&#x22;repository&#x22;: {
+  &#x22;type&#x22;: &#x22;git&#x22;,
+  &#x22;url&#x22;: &#x22;git+https://github.com/tmont/audio-metadata.git&#x22;
+},
+&#x22;scripts&#x22;: {
+  &#x22;build&#x22;: &#x22;./node_modules/.bin/browserify -s AudioMetadata -e index.js --bare &#x3e; audio-metadata.js&#x22;,
 ...</pre></li>
     </ul>
+
+
 
 
 
@@ -500,12 +504,12 @@ AudioMetaData.id3v1(buffer);
 </div>
 
 <div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.audio-metadata.id3v1" id="apidoc.module.audio-metadata.id3v1">module audio-metadata.id3v1</a></h1>
+<h1><a href="#apidoc.module.audio-metadata.index" id="apidoc.module.audio-metadata.index">module audio-metadata.index</a></h1>
 
 
     <h2>
-        <a href="#apidoc.element.audio-metadata.id3v1.id3v1" id="apidoc.element.audio-metadata.id3v1.id3v1">
-        function <span class="apidocSignatureSpan">audio-metadata.</span>id3v1
+        <a href="#apidoc.element.audio-metadata.index.id3v1" id="apidoc.element.audio-metadata.index.id3v1">
+        function <span class="apidocSignatureSpan">audio-metadata.index.</span>id3v1
         <span class="apidocSignatureSpan">(buffer)</span>
         </a>
     </h2>
@@ -557,34 +561,30 @@ AudioMetaData.id3v1(buffer);
 	}
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-// extract comments from OGG container
-AudioMetaData.ogg(buffer)
-
-// extract ID3v2 tags
-AudioMetaData.id3v2(buffer);
-
-// extract ID3v1 tags
-AudioMetaData.<span class="apidocCodeKeywordSpan">id3v1</span>(buffer);
-```
-
-The result is an object with the metadata. It attempts to normalize common keys:
-
-* &#x27;&#x27;title&#x27;&#x27;: (`TIT1` and `TIT2` in id3v2)
-* &#x27;&#x27;artist&#x27;&#x27; (`TSE1` in id3v2)
-* &#x27;&#x27;composer&#x27;&#x27; (`TCOM` in id3v2)
+  {
+    &#x22;name&#x22;: &#x22;tmont&#x22;,
+    &#x22;email&#x22;: &#x22;tommy.mont@gmail.com&#x22;
+  }
+],
+&#x22;name&#x22;: &#x22;audio-metadata&#x22;,
+&#x22;optionalDependencies&#x22;: {},
+&#x22;readme&#x22;: &#x22;# audio-metadata\n\n[![Build Status](https://travis-ci.org/tmont/audio-metadata.png)](https://travis-ci
+.org/tmont/audio-metadata)\n[![NPM version](https://badge.fury.io/js/audio-metadata.png)](http://badge.fury.io/js/audio-metadata)\n\nThis is a tinyish (2.1K gzipped) library to extract metadata from audio files.\nSpecifically, it can extract [ID3v1](http://en.wikipedia.org/wiki/ID3#ID3v1),\n[ID3v2](http://en.wikipedia.org/wiki/ID3#ID3v2) and\n[Vorbis comments](http://www.xiph.org/vorbis/doc/v-comment.html)\n(i.e. metadata in [OGG containers](http://en.wikipedia.org/wiki/Ogg)).\n\nLicensed under the [WTFPL](http://www.wtfpl.net/).\n\n## What is this good for?\nThe purpose of this library is to be very fast and small. It&#x27;s suitable\nfor server-side or client-side. Really any platform that supports\n`ArrayBuffer` and its ilk (`Uint8Array`, etc.).\n\nI wrote it because the other libraries were large and very robust; I just\nneeded something that could extract the metadata out without requiring\n30KB of JavaScript. `audio-metadata.min.js` comes in at 6.1K/2.1K\nminified/gzipped.\n\nTo accomplish the small size and speed, it sacrifices several things.\n\n1. It&#x27;s very naive. For example, the OGG format stipulates that the comment\n   header must come second, after the identification header. This library\n   assumes that&#x27;s always true and ignores the header type byte.\n2. Text encoding is for losers. ID3v2 in particular has a lot of flexibility in\n   terms of the encoding of text for ID3 frames. This library will handle UTF8\n   properly, but everything else is just spit out as ASCII.\n3. It assumes that ID3v2 tags are always the very first thing in the file (as they\n   should be). The spec is mum on whether that&#x27;s &#x27;&#x27;required&#x27;&#x27;, but this library\n   assumes it is.\n4. ID3v1.1 (extended tags with \&#x22;TAG+\&#x22;) are not supported; Wikipedia suggests they\n   aren&#x27;t really well-supported in media players anyway.\n\nAs such, the code is a bit abstruse, in that you&#x27;ll see some magic numbers, like\n`offset += 94` where it&#x27;s ignoring a bunch of header data to get to the good stuff.\nDon&#x27;t judge me based on this code. It works and it&#x27;s tested; it&#x27;s just hard to\nread.\n\nOf course, since this isn&#x27;t an actual parser, invalid files will also work. This\nmeans, for example, you could only read the first couple hundred bytes of an MP3\nfile and still extract the metadata from it, rather than requiring actual valid\nMP3 data.\n\n## Usage\nThe library operates solely on `ArrayBuffer`s, or `Buffer`s for Node&#x27;s convenience.\nSo you&#x27;ll need to preload your audio data before using this library.\n\nThe library defines three methods:\n\n```javascript\n// extract comments from OGG container\nAudioMetaData.ogg(buffer)\n\n// extract ID3v2 tags\nAudioMetaData.id3v2(buffer);\n\n// extract ID3v1 tags\nAudioMetaData.<span class="apidocCodeKeywordSpan">id3v1</span>(buffer);\n```\n\nThe result is an object with the metadata. It attempts to normalize common keys:\n\n* &#x27;&#x27;title&#x27;&#x27;: (`TIT1` and `TIT2` in id3v2)\n* &#x27;&#x27;artist&#x27;&#x27; (`TSE1` in id3v2)\n* &#x27;&#x27;composer&#x27;&#x27; (`TCOM` in id3v2)\n* &#x27;&#x27;album&#x27;&#x27; (`TALB` in id3v2)\n* &#x27;&#x27;track&#x27;&#x27; (`TRCK` in id3v2, commonly `TRACKNUMBER` in vorbis comments)\n* &#x27;&#x27;year&#x27;&#x27; (`TDRC` (date recorded) is used in id3v2)\n* &#x27;&#x27;encoder&#x27;&#x27; (`TSSE` in id3v2)\n* &#x27;&#x27;genre&#x27;&#x27; (`TCON` in id3v2)\n\nEverything else will be keyed by its original name. For id3v2,\nanything that is not a text identifier (i.e. a frame that starts with a\n\&#x22;T\&#x22;) is ignored. This includes comments (`COMM`).\n\n### Node\nInstall it using NPM: `npm install audio-metadata` or `npm install -g audio-metadata`\nif you want to use it from the shell.\n\n```javascript\nvar audioMetaData = require(&#x27;audio-metadata&#x27;),\n\tfs = require(&#x27;fs&#x27;);\n\nvar oggData = fs.readFileSync(&#x27;/path/to/my.ogg&#x27;);\nvar metadata = audioMetaData.ogg(oggData);\n/*\n{\n  \&#x22;title\&#x22;: \&#x22;Contra Base Snippet\&#x22;,\n  \&#x22;artist\&#x22;: \&#x22;Konami\&#x22;,\n  \&#x22;album\&#x22;: \&#x22;Bill and Lance&#x27;s Excellent Adventure\&#x22;,\n  \&#x22;year\&#x22;: \&#x22;1988\&#x22;,\n  \&#x22;tracknumber\&#x22;: \&#x22;1\&#x22;,\n  \&#x22;track\&#x22;: \&#x22;1\&#x22;,\n  \&#x22;encoder\&#x22;: \&#x22;Lavf53.21.1\&#x22;\n}\n*/\n```\n\n#### From the Shell\n```\nExtract metadata from audio files\n\nUSAGE\naudio-metadata --type &#x3c;type&#x3e; [options] file1 [file2...]\n\nOPTIONS\n--help,-h\n  This help\n--type,-t &#x3c;type&#x3e;\n  One of \&#x22;id3v1\&#x22;, \&#x22;id3v2\&#x22; or \&#x22;ogg\&#x22;\n--chunk-size,-c &#x3c;size&#x3e;\n  Read the file in chunks of &#x3c;size&#x3e;; default is 512\n--quit-after,-q &#x3c;length&#x3e;\n  Stop searching for metadata if nothing is found after\n  &#x3c;length&#x3e; bytes; default is 512\n--no-colors,-z\n  Don&#x27;t colorize the output\n\nEXAMPLE\nSearch for metadata in the first 300 bytes in 100 byte increments\n audio-metadata -t id3v2 -c 100 -q 300 keepitoffmy.wav\n ```\n\n### Browser\nThis library has been tested on current versions of Firefox and Chrome. IE\nmight work, since it apparently supports `ArrayBuffer`. Safari/Opera are\nprobably okayish since they&#x27;re webkit. Your mileage may vary.\n\nLoading `audio-metadata.min.js` will define the `AudioMetadata` global variable.\n\n```html\n&#x3c;script type=\&#x22;text/javascript\&#x22; src=\&#x22;audio-metadata.min.js\&#x22;&#x3e;&#x3c;/script&#x3e;\n&#x3c;script type=\&#x22;text/javascript\&#x22;&#x3e;\n\tvar req = new XMLHttpRequest();\n\treq.open(&#x27;GET&#x27;, &#x27;http://example.com/sofine.mp3&#x27;, true);\n\treq.responseType = &#x27;arraybuffer&#x27;;\n\n\treq.onload = function() {\n\t\tvar metadata = AudioMetaData.id3v2(req.response);\n\t\t/*\n\t\t\t{\n\t\t\t\t\&#x22;TIT2\&#x22;: \&#x22;Foobar\&#x22;,\n\t\t\t\t\&#x22;title\&#x22;: \&#x22;Foobar\&#x22;,\n\t\t\t\t\&#x22;TPE1\&#x22;: \&#x22;The Foobars\&#x22;,\n\t\t\t\t\&#x22;artist\&#x22;: \&#x22;The Foobars\&#x22;,\n\t\t\t\t\&#x22;TALB\&#x22;: \&#x22;FUBAR\&#x22;,\n\t\t\t\t\&#x22;album\&#x22;: \&#x22;FUBAR\&#x22;,\n\t\t\t\t\&#x22;year\&#x22;: \&#x22;2014\&#x22;,\n\t\t\t\t\&#x22;TRCK\&#x22;: \&#x22;9\&#x22;,\n\t\t\t\t\&#x22;track\&#x22;: \&#x22;9\&#x22;,\n\t\t\t\t\&#x22;TSSE\&#x22;: \&#x22;Lavf53.21.1\&#x22;,\n\t\t\t\t\&#x22;encoder\&#x22;: \&#x22;Lavf53.21.1\&#x22;\n\t\t\t}\n\t\t*/\n\t};\n\n\treq.send(null);\n&#x3c;/script&#x3e;\n```\n\n## Development\n```bash\ngit clone git@github.com:tmont/audio-metadata.js\ncd audio-metadata\nnpm install\nnpm test\n```\n\nThere&#x27;s a \&#x22;test\&#x22; (yeah, yeah) for browsers, which you can view\nby running `npm start` and then pointing your browser at\n[http://localhost:24578/tests/browser/](http://localhost:24578/tests/browser/).\n\nTo build the minified browserified file, run `npm run minify`.\n&#x22;,
+&#x22;readmeFilename&#x22;: &#x22;README.md&#x22;,
+&#x22;repository&#x22;: {
+  &#x22;type&#x22;: &#x22;git&#x22;,
+  &#x22;url&#x22;: &#x22;git+https://github.com/tmont/audio-metadata.git&#x22;
+},
+&#x22;scripts&#x22;: {
+  &#x22;build&#x22;: &#x22;./node_modules/.bin/browserify -s AudioMetadata -e index.js --bare &#x3e; audio-metadata.js&#x22;,
 ...</pre></li>
     </ul>
 
 
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.audio-metadata.id3v2" id="apidoc.module.audio-metadata.id3v2">module audio-metadata.id3v2</a></h1>
-
 
     <h2>
-        <a href="#apidoc.element.audio-metadata.id3v2.id3v2" id="apidoc.element.audio-metadata.id3v2.id3v2">
-        function <span class="apidocSignatureSpan">audio-metadata.</span>id3v2
+        <a href="#apidoc.element.audio-metadata.index.id3v2" id="apidoc.element.audio-metadata.index.id3v2">
+        function <span class="apidocSignatureSpan">audio-metadata.index.</span>id3v2
         <span class="apidocSignatureSpan">(buffer)</span>
         </a>
     </h2>
@@ -694,33 +694,30 @@ The result is an object with the metadata. It attempts to normalize common keys:
 	return frames;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-The library defines three methods:
-
-```javascript
-// extract comments from OGG container
-AudioMetaData.ogg(buffer)
-
-// extract ID3v2 tags
-AudioMetaData.<span class="apidocCodeKeywordSpan">id3v2</span>(buffer);
-
-// extract ID3v1 tags
-AudioMetaData.id3v1(buffer);
-```
-
-The result is an object with the metadata. It attempts to normalize common keys:
+  {
+    &#x22;name&#x22;: &#x22;tmont&#x22;,
+    &#x22;email&#x22;: &#x22;tommy.mont@gmail.com&#x22;
+  }
+],
+&#x22;name&#x22;: &#x22;audio-metadata&#x22;,
+&#x22;optionalDependencies&#x22;: {},
+&#x22;readme&#x22;: &#x22;# audio-metadata\n\n[![Build Status](https://travis-ci.org/tmont/audio-metadata.png)](https://travis-ci
+.org/tmont/audio-metadata)\n[![NPM version](https://badge.fury.io/js/audio-metadata.png)](http://badge.fury.io/js/audio-metadata)\n\nThis is a tinyish (2.1K gzipped) library to extract metadata from audio files.\nSpecifically, it can extract [ID3v1](http://en.wikipedia.org/wiki/ID3#ID3v1),\n[ID3v2](http://en.wikipedia.org/wiki/ID3#ID3v2) and\n[Vorbis comments](http://www.xiph.org/vorbis/doc/v-comment.html)\n(i.e. metadata in [OGG containers](http://en.wikipedia.org/wiki/Ogg)).\n\nLicensed under the [WTFPL](http://www.wtfpl.net/).\n\n## What is this good for?\nThe purpose of this library is to be very fast and small. It&#x27;s suitable\nfor server-side or client-side. Really any platform that supports\n`ArrayBuffer` and its ilk (`Uint8Array`, etc.).\n\nI wrote it because the other libraries were large and very robust; I just\nneeded something that could extract the metadata out without requiring\n30KB of JavaScript. `audio-metadata.min.js` comes in at 6.1K/2.1K\nminified/gzipped.\n\nTo accomplish the small size and speed, it sacrifices several things.\n\n1. It&#x27;s very naive. For example, the OGG format stipulates that the comment\n   header must come second, after the identification header. This library\n   assumes that&#x27;s always true and ignores the header type byte.\n2. Text encoding is for losers. ID3v2 in particular has a lot of flexibility in\n   terms of the encoding of text for ID3 frames. This library will handle UTF8\n   properly, but everything else is just spit out as ASCII.\n3. It assumes that ID3v2 tags are always the very first thing in the file (as they\n   should be). The spec is mum on whether that&#x27;s &#x27;&#x27;required&#x27;&#x27;, but this library\n   assumes it is.\n4. ID3v1.1 (extended tags with \&#x22;TAG+\&#x22;) are not supported; Wikipedia suggests they\n   aren&#x27;t really well-supported in media players anyway.\n\nAs such, the code is a bit abstruse, in that you&#x27;ll see some magic numbers, like\n`offset += 94` where it&#x27;s ignoring a bunch of header data to get to the good stuff.\nDon&#x27;t judge me based on this code. It works and it&#x27;s tested; it&#x27;s just hard to\nread.\n\nOf course, since this isn&#x27;t an actual parser, invalid files will also work. This\nmeans, for example, you could only read the first couple hundred bytes of an MP3\nfile and still extract the metadata from it, rather than requiring actual valid\nMP3 data.\n\n## Usage\nThe library operates solely on `ArrayBuffer`s, or `Buffer`s for Node&#x27;s convenience.\nSo you&#x27;ll need to preload your audio data before using this library.\n\nThe library defines three methods:\n\n```javascript\n// extract comments from OGG container\nAudioMetaData.ogg(buffer)\n\n// extract ID3v2 tags\nAudioMetaData.<span class="apidocCodeKeywordSpan">id3v2</span>(buffer);\n\n// extract ID3v1 tags\nAudioMetaData.id3v1(buffer);\n```\n\nThe result is an object with the metadata. It attempts to normalize common keys:\n\n* &#x27;&#x27;title&#x27;&#x27;: (`TIT1` and `TIT2` in id3v2)\n* &#x27;&#x27;artist&#x27;&#x27; (`TSE1` in id3v2)\n* &#x27;&#x27;composer&#x27;&#x27; (`TCOM` in id3v2)\n* &#x27;&#x27;album&#x27;&#x27; (`TALB` in id3v2)\n* &#x27;&#x27;track&#x27;&#x27; (`TRCK` in id3v2, commonly `TRACKNUMBER` in vorbis comments)\n* &#x27;&#x27;year&#x27;&#x27; (`TDRC` (date recorded) is used in id3v2)\n* &#x27;&#x27;encoder&#x27;&#x27; (`TSSE` in id3v2)\n* &#x27;&#x27;genre&#x27;&#x27; (`TCON` in id3v2)\n\nEverything else will be keyed by its original name. For id3v2,\nanything that is not a text identifier (i.e. a frame that starts with a\n\&#x22;T\&#x22;) is ignored. This includes comments (`COMM`).\n\n### Node\nInstall it using NPM: `npm install audio-metadata` or `npm install -g audio-metadata`\nif you want to use it from the shell.\n\n```javascript\nvar audioMetaData = require(&#x27;audio-metadata&#x27;),\n\tfs = require(&#x27;fs&#x27;);\n\nvar oggData = fs.readFileSync(&#x27;/path/to/my.ogg&#x27;);\nvar metadata = audioMetaData.ogg(oggData);\n/*\n{\n  \&#x22;title\&#x22;: \&#x22;Contra Base Snippet\&#x22;,\n  \&#x22;artist\&#x22;: \&#x22;Konami\&#x22;,\n  \&#x22;album\&#x22;: \&#x22;Bill and Lance&#x27;s Excellent Adventure\&#x22;,\n  \&#x22;year\&#x22;: \&#x22;1988\&#x22;,\n  \&#x22;tracknumber\&#x22;: \&#x22;1\&#x22;,\n  \&#x22;track\&#x22;: \&#x22;1\&#x22;,\n  \&#x22;encoder\&#x22;: \&#x22;Lavf53.21.1\&#x22;\n}\n*/\n```\n\n#### From the Shell\n```\nExtract metadata from audio files\n\nUSAGE\naudio-metadata --type &#x3c;type&#x3e; [options] file1 [file2...]\n\nOPTIONS\n--help,-h\n  This help\n--type,-t &#x3c;type&#x3e;\n  One of \&#x22;id3v1\&#x22;, \&#x22;id3v2\&#x22; or \&#x22;ogg\&#x22;\n--chunk-size,-c &#x3c;size&#x3e;\n  Read the file in chunks of &#x3c;size&#x3e;; default is 512\n--quit-after,-q &#x3c;length&#x3e;\n  Stop searching for metadata if nothing is found after\n  &#x3c;length&#x3e; bytes; default is 512\n--no-colors,-z\n  Don&#x27;t colorize the output\n\nEXAMPLE\nSearch for metadata in the first 300 bytes in 100 byte increments\n audio-metadata -t id3v2 -c 100 -q 300 keepitoffmy.wav\n ```\n\n### Browser\nThis library has been tested on current versions of Firefox and Chrome. IE\nmight work, since it apparently supports `ArrayBuffer`. Safari/Opera are\nprobably okayish since they&#x27;re webkit. Your mileage may vary.\n\nLoading `audio-metadata.min.js` will define the `AudioMetadata` global variable.\n\n```html\n&#x3c;script type=\&#x22;text/javascript\&#x22; src=\&#x22;audio-metadata.min.js\&#x22;&#x3e;&#x3c;/script&#x3e;\n&#x3c;script type=\&#x22;text/javascript\&#x22;&#x3e;\n\tvar req = new XMLHttpRequest();\n\treq.open(&#x27;GET&#x27;, &#x27;http://example.com/sofine.mp3&#x27;, true);\n\treq.responseType = &#x27;arraybuffer&#x27;;\n\n\treq.onload = function() {\n\t\tvar metadata = AudioMetaData.id3v2(req.response);\n\t\t/*\n\t\t\t{\n\t\t\t\t\&#x22;TIT2\&#x22;: \&#x22;Foobar\&#x22;,\n\t\t\t\t\&#x22;title\&#x22;: \&#x22;Foobar\&#x22;,\n\t\t\t\t\&#x22;TPE1\&#x22;: \&#x22;The Foobars\&#x22;,\n\t\t\t\t\&#x22;artist\&#x22;: \&#x22;The Foobars\&#x22;,\n\t\t\t\t\&#x22;TALB\&#x22;: \&#x22;FUBAR\&#x22;,\n\t\t\t\t\&#x22;album\&#x22;: \&#x22;FUBAR\&#x22;,\n\t\t\t\t\&#x22;year\&#x22;: \&#x22;2014\&#x22;,\n\t\t\t\t\&#x22;TRCK\&#x22;: \&#x22;9\&#x22;,\n\t\t\t\t\&#x22;track\&#x22;: \&#x22;9\&#x22;,\n\t\t\t\t\&#x22;TSSE\&#x22;: \&#x22;Lavf53.21.1\&#x22;,\n\t\t\t\t\&#x22;encoder\&#x22;: \&#x22;Lavf53.21.1\&#x22;\n\t\t\t}\n\t\t*/\n\t};\n\n\treq.send(null);\n&#x3c;/script&#x3e;\n```\n\n## Development\n```bash\ngit clone git@github.com:tmont/audio-metadata.js\ncd audio-metadata\nnpm install\nnpm test\n```\n\nThere&#x27;s a \&#x22;test\&#x22; (yeah, yeah) for browsers, which you can view\nby running `npm start` and then pointing your browser at\n[http://localhost:24578/tests/browser/](http://localhost:24578/tests/browser/).\n\nTo build the minified browserified file, run `npm run minify`.\n&#x22;,
+&#x22;readmeFilename&#x22;: &#x22;README.md&#x22;,
+&#x22;repository&#x22;: {
+  &#x22;type&#x22;: &#x22;git&#x22;,
+  &#x22;url&#x22;: &#x22;git+https://github.com/tmont/audio-metadata.git&#x22;
+},
+&#x22;scripts&#x22;: {
+  &#x22;build&#x22;: &#x22;./node_modules/.bin/browserify -s AudioMetadata -e index.js --bare &#x3e; audio-metadata.js&#x22;,
 ...</pre></li>
     </ul>
 
 
-</div>
-
-<div class="apidocSectionDiv">
-<h1><a href="#apidoc.module.audio-metadata.ogg" id="apidoc.module.audio-metadata.ogg">module audio-metadata.ogg</a></h1>
-
 
     <h2>
-        <a href="#apidoc.element.audio-metadata.ogg.ogg" id="apidoc.element.audio-metadata.ogg.ogg">
-        function <span class="apidocSignatureSpan">audio-metadata.</span>ogg
+        <a href="#apidoc.element.audio-metadata.index.ogg" id="apidoc.element.audio-metadata.index.ogg">
+        function <span class="apidocSignatureSpan">audio-metadata.index.</span>ogg
         <span class="apidocSignatureSpan">(buffer)</span>
         </a>
     </h2>
@@ -799,21 +796,22 @@ The result is an object with the metadata. It attempts to normalize common keys:
 	return parseComments(commentHeader.packet);
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-The library operates solely on `ArrayBuffer`s, or `Buffer`s for Node&#x27;s convenience.
-So you&#x27;ll need to preload your audio data before using this library.
-
-The library defines three methods:
-
-```javascript
-// extract comments from OGG container
-AudioMetaData.<span class="apidocCodeKeywordSpan">ogg</span>(buffer)
-
-// extract ID3v2 tags
-AudioMetaData.id3v2(buffer);
-
-// extract ID3v1 tags
-AudioMetaData.id3v1(buffer);
-```
+  {
+    &#x22;name&#x22;: &#x22;tmont&#x22;,
+    &#x22;email&#x22;: &#x22;tommy.mont@gmail.com&#x22;
+  }
+],
+&#x22;name&#x22;: &#x22;audio-metadata&#x22;,
+&#x22;optionalDependencies&#x22;: {},
+&#x22;readme&#x22;: &#x22;# audio-metadata\n\n[![Build Status](https://travis-ci.org/tmont/audio-metadata.png)](https://travis-ci
+.org/tmont/audio-metadata)\n[![NPM version](https://badge.fury.io/js/audio-metadata.png)](http://badge.fury.io/js/audio-metadata)\n\nThis is a tinyish (2.1K gzipped) library to extract metadata from audio files.\nSpecifically, it can extract [ID3v1](http://en.wikipedia.org/wiki/ID3#ID3v1),\n[ID3v2](http://en.wikipedia.org/wiki/ID3#ID3v2) and\n[Vorbis comments](http://www.xiph.org/vorbis/doc/v-comment.html)\n(i.e. metadata in [OGG containers](http://en.wikipedia.org/wiki/Ogg)).\n\nLicensed under the [WTFPL](http://www.wtfpl.net/).\n\n## What is this good for?\nThe purpose of this library is to be very fast and small. It&#x27;s suitable\nfor server-side or client-side. Really any platform that supports\n`ArrayBuffer` and its ilk (`Uint8Array`, etc.).\n\nI wrote it because the other libraries were large and very robust; I just\nneeded something that could extract the metadata out without requiring\n30KB of JavaScript. `audio-metadata.min.js` comes in at 6.1K/2.1K\nminified/gzipped.\n\nTo accomplish the small size and speed, it sacrifices several things.\n\n1. It&#x27;s very naive. For example, the OGG format stipulates that the comment\n   header must come second, after the identification header. This library\n   assumes that&#x27;s always true and ignores the header type byte.\n2. Text encoding is for losers. ID3v2 in particular has a lot of flexibility in\n   terms of the encoding of text for ID3 frames. This library will handle UTF8\n   properly, but everything else is just spit out as ASCII.\n3. It assumes that ID3v2 tags are always the very first thing in the file (as they\n   should be). The spec is mum on whether that&#x27;s &#x27;&#x27;required&#x27;&#x27;, but this library\n   assumes it is.\n4. ID3v1.1 (extended tags with \&#x22;TAG+\&#x22;) are not supported; Wikipedia suggests they\n   aren&#x27;t really well-supported in media players anyway.\n\nAs such, the code is a bit abstruse, in that you&#x27;ll see some magic numbers, like\n`offset += 94` where it&#x27;s ignoring a bunch of header data to get to the good stuff.\nDon&#x27;t judge me based on this code. It works and it&#x27;s tested; it&#x27;s just hard to\nread.\n\nOf course, since this isn&#x27;t an actual parser, invalid files will also work. This\nmeans, for example, you could only read the first couple hundred bytes of an MP3\nfile and still extract the metadata from it, rather than requiring actual valid\nMP3 data.\n\n## Usage\nThe library operates solely on `ArrayBuffer`s, or `Buffer`s for Node&#x27;s convenience.\nSo you&#x27;ll need to preload your audio data before using this library.\n\nThe library defines three methods:\n\n```javascript\n// extract comments from OGG container\nAudioMetaData.<span class="apidocCodeKeywordSpan">ogg</span>(buffer)\n\n// extract ID3v2 tags\nAudioMetaData.id3v2(buffer);\n\n// extract ID3v1 tags\nAudioMetaData.id3v1(buffer);\n```\n\nThe result is an object with the metadata. It attempts to normalize common keys:\n\n* &#x27;&#x27;title&#x27;&#x27;: (`TIT1` and `TIT2` in id3v2)\n* &#x27;&#x27;artist&#x27;&#x27; (`TSE1` in id3v2)\n* &#x27;&#x27;composer&#x27;&#x27; (`TCOM` in id3v2)\n* &#x27;&#x27;album&#x27;&#x27; (`TALB` in id3v2)\n* &#x27;&#x27;track&#x27;&#x27; (`TRCK` in id3v2, commonly `TRACKNUMBER` in vorbis comments)\n* &#x27;&#x27;year&#x27;&#x27; (`TDRC` (date recorded) is used in id3v2)\n* &#x27;&#x27;encoder&#x27;&#x27; (`TSSE` in id3v2)\n* &#x27;&#x27;genre&#x27;&#x27; (`TCON` in id3v2)\n\nEverything else will be keyed by its original name. For id3v2,\nanything that is not a text identifier (i.e. a frame that starts with a\n\&#x22;T\&#x22;) is ignored. This includes comments (`COMM`).\n\n### Node\nInstall it using NPM: `npm install audio-metadata` or `npm install -g audio-metadata`\nif you want to use it from the shell.\n\n```javascript\nvar audioMetaData = require(&#x27;audio-metadata&#x27;),\n\tfs = require(&#x27;fs&#x27;);\n\nvar oggData = fs.readFileSync(&#x27;/path/to/my.ogg&#x27;);\nvar metadata = audioMetaData.ogg(oggData);\n/*\n{\n  \&#x22;title\&#x22;: \&#x22;Contra Base Snippet\&#x22;,\n  \&#x22;artist\&#x22;: \&#x22;Konami\&#x22;,\n  \&#x22;album\&#x22;: \&#x22;Bill and Lance&#x27;s Excellent Adventure\&#x22;,\n  \&#x22;year\&#x22;: \&#x22;1988\&#x22;,\n  \&#x22;tracknumber\&#x22;: \&#x22;1\&#x22;,\n  \&#x22;track\&#x22;: \&#x22;1\&#x22;,\n  \&#x22;encoder\&#x22;: \&#x22;Lavf53.21.1\&#x22;\n}\n*/\n```\n\n#### From the Shell\n```\nExtract metadata from audio files\n\nUSAGE\naudio-metadata --type &#x3c;type&#x3e; [options] file1 [file2...]\n\nOPTIONS\n--help,-h\n  This help\n--type,-t &#x3c;type&#x3e;\n  One of \&#x22;id3v1\&#x22;, \&#x22;id3v2\&#x22; or \&#x22;ogg\&#x22;\n--chunk-size,-c &#x3c;size&#x3e;\n  Read the file in chunks of &#x3c;size&#x3e;; default is 512\n--quit-after,-q &#x3c;length&#x3e;\n  Stop searching for metadata if nothing is found after\n  &#x3c;length&#x3e; bytes; default is 512\n--no-colors,-z\n  Don&#x27;t colorize the output\n\nEXAMPLE\nSearch for metadata in the first 300 bytes in 100 byte increments\n audio-metadata -t id3v2 -c 100 -q 300 keepitoffmy.wav\n ```\n\n### Browser\nThis library has been tested on current versions of Firefox and Chrome. IE\nmight work, since it apparently supports `ArrayBuffer`. Safari/Opera are\nprobably okayish since they&#x27;re webkit. Your mileage may vary.\n\nLoading `audio-metadata.min.js` will define the `AudioMetadata` global variable.\n\n```html\n&#x3c;script type=\&#x22;text/javascript\&#x22; src=\&#x22;audio-metadata.min.js\&#x22;&#x3e;&#x3c;/script&#x3e;\n&#x3c;script type=\&#x22;text/javascript\&#x22;&#x3e;\n\tvar req = new XMLHttpRequest();\n\treq.open(&#x27;GET&#x27;, &#x27;http://example.com/sofine.mp3&#x27;, true);\n\treq.responseType = &#x27;arraybuffer&#x27;;\n\n\treq.onload = function() {\n\t\tvar metadata = AudioMetaData.id3v2(req.response);\n\t\t/*\n\t\t\t{\n\t\t\t\t\&#x22;TIT2\&#x22;: \&#x22;Foobar\&#x22;,\n\t\t\t\t\&#x22;title\&#x22;: \&#x22;Foobar\&#x22;,\n\t\t\t\t\&#x22;TPE1\&#x22;: \&#x22;The Foobars\&#x22;,\n\t\t\t\t\&#x22;artist\&#x22;: \&#x22;The Foobars\&#x22;,\n\t\t\t\t\&#x22;TALB\&#x22;: \&#x22;FUBAR\&#x22;,\n\t\t\t\t\&#x22;album\&#x22;: \&#x22;FUBAR\&#x22;,\n\t\t\t\t\&#x22;year\&#x22;: \&#x22;2014\&#x22;,\n\t\t\t\t\&#x22;TRCK\&#x22;: \&#x22;9\&#x22;,\n\t\t\t\t\&#x22;track\&#x22;: \&#x22;9\&#x22;,\n\t\t\t\t\&#x22;TSSE\&#x22;: \&#x22;Lavf53.21.1\&#x22;,\n\t\t\t\t\&#x22;encoder\&#x22;: \&#x22;Lavf53.21.1\&#x22;\n\t\t\t}\n\t\t*/\n\t};\n\n\treq.send(null);\n&#x3c;/script&#x3e;\n```\n\n## Development\n```bash\ngit clone git@github.com:tmont/audio-metadata.js\ncd audio-metadata\nnpm install\nnpm test\n```\n\nThere&#x27;s a \&#x22;test\&#x22; (yeah, yeah) for browsers, which you can view\nby running `npm start` and then pointing your browser at\n[http://localhost:24578/tests/browser/](http://localhost:24578/tests/browser/).\n\nTo build the minified browserified file, run `npm run minify`.\n&#x22;,
+&#x22;readmeFilename&#x22;: &#x22;README.md&#x22;,
+&#x22;repository&#x22;: {
+  &#x22;type&#x22;: &#x22;git&#x22;,
+  &#x22;url&#x22;: &#x22;git+https://github.com/tmont/audio-metadata.git&#x22;
+},
+&#x22;scripts&#x22;: {
+  &#x22;build&#x22;: &#x22;./node_modules/.bin/browserify -s AudioMetadata -e index.js --bare &#x3e; audio-metadata.js&#x22;,
 ...</pre></li>
     </ul>
 
@@ -843,7 +841,23 @@ AudioMetaData.id3v1(buffer);
 
 		return new DataView(buffer);
 	}</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+	var id3Magic = utils.readBytes(view, view.byteLength - 128, 3);
+	//&#x22;TAG&#x22;
+	return id3Magic[0] === 84 &#x26;&#x26; id3Magic[1] === 65 &#x26;&#x26; id3Magic[2] === 71;
+}
+
+module.exports = function(buffer) {
+	//read last 128 bytes
+	var view = utils.<span class="apidocCodeKeywordSpan">createView</span>(buffer);
+	if (!checkMagicId3v1(view)) {
+		return null;
+	}
+
+	function trim(value) {
+		return value.replace(/[\s\u0000]+$/, &#x27;&#x27;);
+	}
+...</pre></li>
     </ul>
 
 
@@ -866,7 +880,23 @@ AudioMetaData.id3v1(buffer);
 
 		return s;
 	}</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+	if (extendedHeader) {
+		offset += getUint28(view, offset);
+	}
+
+	function readFrame(offset) {
+		try {
+			var id = utils.<span class="apidocCodeKeywordSpan">readAscii</span>(view, offset, 4);
+			var size = getUint28(view, offset + 4);
+			offset += 10; //+2 more for flags we don&#x27;t care about
+
+			if (id[0] !== &#x27;T&#x27;) {
+				return {
+					id: id,
+					size: size + 10
+...</pre></li>
     </ul>
 
 
@@ -895,7 +925,23 @@ AudioMetaData.id3v1(buffer);
 
 		return bytes;
 	}</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+
+
+
+
+var utils = require(&#x27;./utils&#x27;);
+
+function checkMagicId3v1(view) {
+	var id3Magic = utils.<span class="apidocCodeKeywordSpan">readBytes</span>(view, view.byteLength - 128, 3);
+	//&#x22;TAG&#x22;
+	return id3Magic[0] === 84 &#x26;&#x26; id3Magic[1] === 65 &#x26;&#x26; id3Magic[2] === 71;
+}
+
+module.exports = function(buffer) {
+	//read last 128 bytes
+	var view = utils.createView(buffer);
+...</pre></li>
     </ul>
 
 
@@ -918,7 +964,23 @@ AudioMetaData.id3v1(buffer);
 		var encodedString = String.fromCharCode.apply(null, new Uint8Array(buffer));
 		return decodeURIComponent(escape(encodedString));
 	}</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+			var encoding = view.getUint8(offset),
+				data = &#x27;&#x27;;
+
+			if (encoding &#x3c;= 3) {
+				offset++;
+				if (encoding === 3) {
+					//UTF8 - null terminated
+					data = utils.<span class="apidocCodeKeywordSpan">readUtf8</span>(view, offset, size - 1);
+				} else {
+					//ISO-8859-1, UTF-16, UTF-16BE
+					//UTF-16 and UTF-16BE are $FF $00 terminated
+					//ISO is null terminated
+
+					//screw these encodings, read it as ascii
+					data = utils.readAscii(view, offset, size - 1);
+...</pre></li>
     </ul>
 
 
@@ -933,7 +995,23 @@ AudioMetaData.id3v1(buffer);
     <li>description and source-code<pre class="apidocCodePre">trimNull = function (s) {
 		return s.replace(/\u0000+$/, &#x27;&#x27;);
 	}</pre></li>
-    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+			} else {
+				//no encoding info, read it as ascii
+				data = utils.readAscii(view, offset, size);
+			}
+
+			//id3v2.4 is supposed to have encoding terminations, but sometimes
+			//they don&#x27;t? meh.
+			data = utils.<span class="apidocCodeKeywordSpan">trimNull</span>(data);
+
+			return {
+				id: id,
+				size: size + 10,
+				content: data
+			};
+		} catch (e) {
+...</pre></li>
     </ul>
 
 
